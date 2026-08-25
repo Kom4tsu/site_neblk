@@ -1,0 +1,25 @@
+<%- include('../partials/head') %>
+<div class="admin-shell">
+  <%- include('../partials/admin-nav') %>
+  <main class="admin-main" id="main-content">
+    <% const adminTitle = 'Visão geral'; %><%- include('../partials/admin-top', { adminTitle }) %>
+    <%- include('../partials/flash') %>
+    <section class="metric-grid">
+      <article class="metric-card"><span>FATURAMENTO DO MÊS</span><strong><%= formatCurrency(metrics.revenue) %></strong><small>Pedidos ainda não cancelados</small></article>
+      <article class="metric-card"><span>PEDIDOS NO MÊS</span><strong><%= metrics.orders %></strong><small>Movimento da operação</small></article>
+      <article class="metric-card"><span>NOVOS CLIENTES</span><strong><%= metrics.customers %></strong><small>Base total cadastrada</small></article>
+      <article class="metric-card"><span>VISUALIZAÇÕES</span><strong><%= metrics.views %></strong><small>Interesse nas peças este mês</small></article>
+    </section>
+    <section class="admin-panel sales-panel">
+      <div class="panel-heading"><div><span class="eyebrow">ACOMPANHAMENTO</span><h2><%= metrics.goal ? metrics.goal.title.toUpperCase() : 'META MENSAL' %></h2></div><strong><%= metrics.goal ? formatCurrency(metrics.revenue) : formatCurrency(0) %> <span>/ <%= metrics.goal ? formatCurrency(metrics.goal.target_cents) : '-' %></span></strong></div>
+      <% const progress = metrics.goal && metrics.goal.target_cents ? Math.min(100, Math.round((metrics.revenue / metrics.goal.target_cents) * 100)) : 0; %>
+      <div class="goal-bar"><span style="width: <%= progress %>%"></span></div><div class="goal-caption"><span><%= progress %>% da meta</span><span><%= metrics.goal ? `${new Date(metrics.goal.end_date + 'T00:00:00').toLocaleDateString('pt-BR')} encerra` : 'Defina uma meta' %></span></div>
+      <div class="sales-chart" data-sales-chart='<%- chartData %>'><div class="chart-bars"></div><div class="chart-labels"></div></div>
+    </section>
+    <section class="admin-columns">
+      <article class="admin-panel"><div class="panel-heading"><div><span class="eyebrow">INTERESSE</span><h2>MAIS VISUALIZADOS</h2></div><a href="/admin/metricas" class="text-link">DETALHES ↗</a></div><div class="ranking-list"><% metrics.topViewed.forEach((item, index) => { %><div class="ranking-row"><span class="rank">0<%= index + 1 %></span><img src="<%= item.image_url || '/assets/products/shadow-logo.svg' %>" alt=""><div><strong><%= item.name %></strong><small><%= item.views %> visualizações</small></div><a href="/admin/produtos/<%= item.id %>/editar">Editar</a></div><% }) %></div></article>
+      <article class="admin-panel"><div class="panel-heading"><div><span class="eyebrow">ÚLTIMOS</span><h2>PEDIDOS RECENTES</h2></div><a href="/admin/pedidos" class="text-link">VER TODOS ↗</a></div><div class="recent-orders"><% if (metrics.recentOrders.length) { %><% metrics.recentOrders.forEach((order) => { %><div class="recent-order"><div><strong><%= order.order_number %></strong><small><%= order.customer_name %> · <%= formatDate(order.created_at) %></small></div><div><span class="status status-<%= order.status %>"><%= statusLabel(order.status) %></span><strong><%= formatCurrency(order.total_cents) %></strong></div></div><% }) %><% } else { %><p class="muted empty-copy">Ainda não há pedidos cadastrados.</p><% } %></div></article>
+    </section>
+    <% if (metrics.lowStock.length) { %><section class="admin-panel low-stock"><div class="panel-heading"><div><span class="eyebrow">ATENÇÃO</span><h2>ESTOQUE BAIXO</h2></div></div><div class="stock-chips"><% metrics.lowStock.forEach((item) => { %><a href="/admin/produtos"><strong><%= item.name %></strong><span><%= item.total_stock %> un.</span></a><% }) %></div></section><% } %>
+  </main>
+<%- include('../partials/admin-end') %>

@@ -1,0 +1,25 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main id="main-content" class="drops-page">
+  <section class="drops-intro container">
+    <p class="eyebrow">NEBLK / RELEASES</p>
+    <h1>ALL <em>DROPS.</em></h1>
+    <p>Peças lançadas em capítulos. Cada drop tem sua própria energia, textura e quantidade limitada.</p>
+  </section>
+  <section class="drop-list container">
+    <% if (drops.length) { %>
+      <% drops.forEach((drop, index) => { %>
+        <a href="/drops/<%= drop.slug %>" class="drop-feature-card <%= drop.banner_url ? 'has-banner' : '' %>" style="<%= drop.banner_url ? `--drop-banner:url('${drop.banner_url}')` : '' %>">
+          <div class="drop-feature-overlay"></div>
+          <div class="drop-feature-count">0<%= index + 1 %></div>
+          <div class="drop-feature-copy"><p class="eyebrow"><%= drop.banner_label || 'NEBLK LIMITED RELEASE' %></p><h2><%= drop.name %></h2><p><%= drop.description || 'Uma seleção limitada com identidade própria.' %></p><span class="drop-feature-cta">EXPLORAR DROP <b>↗</b></span></div>
+          <div class="drop-feature-meta"><span><%= drop.product_count %> PEÇAS</span><span>NEBLK / 2026</span></div>
+        </a>
+      <% }) %>
+    <% } else { %>
+      <div class="empty-state"><h2>Nenhum drop publicado ainda.</h2><p>Em breve, uma nova frequência chega na NEBLK.</p><a href="/loja" class="button button-primary">IR PARA A LOJA ↗</a></div>
+    <% } %>
+  </section>
+</main>
+<%- include('partials/footer') %>

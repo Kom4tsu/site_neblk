@@ -1,0 +1,20 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main id="main-content" class="drop-page">
+  <section class="drop-hero <%= drop.banner_url ? 'has-banner' : '' %>" style="<%= drop.banner_url ? `--drop-banner:url('${drop.banner_url}')` : '' %>">
+    <div class="drop-hero-overlay"></div>
+    <div class="container drop-hero-inner">
+      <p class="eyebrow"><%= drop.banner_label || 'NEBLK LIMITED RELEASE' %></p>
+      <h1><%= drop.name.toUpperCase() %></h1>
+      <p class="drop-hero-description"><%= drop.description || 'Uma cápsula limitada desenhada para deixar marca.' %></p>
+      <div class="drop-hero-bottom"><span><%= products.length %> PEÇAS DISPONÍVEIS</span><a href="#pecas">VER PEÇAS <b>↓</b></a></div>
+    </div>
+  </section>
+
+  <section id="pecas" class="section container drop-products-section">
+    <div class="section-heading section-heading-v2"><div><p class="eyebrow">SELEÇÃO DO DROP</p><h2>THE <em>PIECES.</em></h2></div><a href="/drops" class="text-link text-link-bold">VER TODOS OS DROPS <span>↗</span></a></div>
+    <% if (products.length) { %><div class="products-grid products-grid-4"><% products.forEach((product, index) => { %><%- include('partials/product-card', { product, index }) %><% }) %></div><% } else { %><div class="empty-state"><h2>As peças deste drop esgotaram.</h2><p>Confira os outros lançamentos da NEBLK.</p><a href="/drops" class="button button-primary">VER OUTROS DROPS ↗</a></div><% } %>
+  </section>
+</main>
+<%- include('partials/footer') %>

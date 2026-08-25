@@ -1,0 +1,46 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<%- include('../partials/flash') %>
+<main id="main-content" class="container page-section account-page">
+  <div class="page-heading compact"><p class="eyebrow">PERFIL</p><h1>SUA <em>IDENTIDADE.</em></h1><p>Seus dados ficam salvos para acelerar os próximos pedidos.</p></div>
+  <div class="account-layout">
+    <aside class="account-aside">
+      <a href="/conta">Meus pedidos</a>
+      <a class="active" href="/conta/perfil">Meu perfil e endereço</a>
+      <a href="/loja">Continuar comprando</a>
+      <form action="/logout" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button type="submit">Sair da conta</button></form>
+    </aside>
+    <section class="account-content profile-content">
+      <form method="post" action="/conta/perfil" class="profile-form" data-address-form>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="panel-heading"><div><span class="eyebrow">DADOS</span><h2>CONTATO E ENTREGA</h2></div></div>
+        <div class="form-grid">
+          <label>Nome completo<input name="name" required value="<%= user.name || '' %>"></label>
+          <label>E-mail<input value="<%= user.email %>" disabled></label>
+          <label>WhatsApp<input name="phone" autocomplete="tel" value="<%= user.phone || '' %>" placeholder="(00) 00000-0000"></label>
+          <label>CPF (opcional)<input name="cpf" value="<%= user.cpf || '' %>" placeholder="000.000.000-00"></label>
+        </div>
+        <div class="profile-divider"><span>ENDEREÇO PRINCIPAL</span></div>
+        <div class="form-grid">
+          <label>CEP <small data-cep-status></small><input name="address_zip" data-cep autocomplete="postal-code" value="<%= user.address_zip || '' %>" placeholder="00000-000"></label>
+          <label>Rua / Avenida<input name="address_street" data-address-street autocomplete="address-line1" value="<%= user.address_street || '' %>" placeholder="Rua, avenida ou alameda"></label>
+          <label>Número<input name="address_number" autocomplete="address-line2" value="<%= user.address_number || '' %>" placeholder="123"></label>
+          <label>Complemento<input name="address_complement" value="<%= user.address_complement || '' %>" placeholder="Apto, bloco, referência"></label>
+          <label>Bairro<input name="address_district" data-address-district value="<%= user.address_district || '' %>" placeholder="Centro"></label>
+          <label>Cidade<input name="address_city" data-address-city value="<%= user.address_city || '' %>" placeholder="Cidade"></label>
+          <label>Estado<input name="address_state" data-address-state maxlength="2" value="<%= user.address_state || '' %>" placeholder="SP"></label>
+        </div>
+        <button type="submit" class="button button-primary">SALVAR PERFIL ↗</button>
+      </form>
+
+      <form method="post" action="/conta/perfil/senha" class="profile-form password-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="panel-heading"><div><span class="eyebrow">SEGURANÇA</span><h2>ALTERAR SENHA</h2></div></div>
+        <label>Senha atual<input name="current_password" type="password" required autocomplete="current-password"></label>
+        <label>Nova senha<input name="new_password" type="password" required minlength="8" autocomplete="new-password" placeholder="Mínimo de 8 caracteres"></label>
+        <button type="submit" class="button button-outline">ATUALIZAR SENHA</button>
+      </form>
+    </section>
+  </div>
+</main>
+<%- include('../partials/footer') %>

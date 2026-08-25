@@ -1,0 +1,36 @@
+<footer class="site-footer">
+  <div class="footer-noise"></div>
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-brand"><img src="/assets/brand/neblk-mark.svg" alt=""><span>NEBLK</span></div>
+      <p class="footer-slogan"><%= settings.brand_slogan || 'NEBLK lets you be.' %></p>
+      <p class="muted">Streetwear feito para a sua assinatura, não para seguir o padrão.</p>
+    </div>
+    <div>
+      <h3>LOJA</h3>
+      <a href="/loja">Todos os produtos</a>
+      <a href="/loja?collection=Drop%2001">Drop 01</a>
+      <a href="/conta">Minha conta</a>
+    </div>
+    <div>
+      <h3>CONTATO</h3>
+      <% if (settings.instagram_url) { %><a href="<%= settings.instagram_url %>" target="_blank" rel="noreferrer">Instagram</a><% } %>
+      <% if (settings.facebook_url) { %><a href="<%= settings.facebook_url %>" target="_blank" rel="noreferrer">Facebook</a><% } %>
+      <% if (settings.tiktok_url) { %><a href="<%= settings.tiktok_url %>" target="_blank" rel="noreferrer">TikTok</a><% } %>
+      <% if (settings.whatsapp_url) { %><a href="<%= settings.whatsapp_url %>" target="_blank" rel="noreferrer">WhatsApp</a><% } %>
+      <% if (settings.support_email) { %><a href="mailto:<%= settings.support_email %>"><%= settings.support_email %></a><% } %>
+    </div>
+    <div>
+      <h3>NEWSLETTER</h3>
+      <p class="muted">Receba novidades dos próximos drops.</p>
+      <form class="newsletter-form" action="#" onsubmit="return false">
+        <input type="email" placeholder="seu@email.com" aria-label="Seu e-mail">
+        <button type="submit" aria-label="Cadastrar e-mail">↗</button>
+      </form>
+    </div>
+  </div>
+  <div class="container footer-bottom"><span>© <%= year %> NEBLK</span><span>BUILT FOR THE OUTSIDE.</span></div>
+</footer>
+<script src="/js/app.js" defer></script>
+</body>
+</html>

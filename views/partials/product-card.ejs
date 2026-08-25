@@ -1,0 +1,14 @@
+<article class="product-card">
+  <a href="/produto/<%= product.slug %>" class="product-image-wrap">
+    <img src="<%= product.image_url || '/assets/products/shadow-logo.svg' %>" alt="<%= product.name %>" class="product-image" loading="lazy">
+    <% if (product.compare_at_cents && product.compare_at_cents > product.price_cents) { %><span class="badge">DROP PRICE</span><% } %>
+    <% if (product.total_stock <= 5 && product.total_stock > 0) { %><span class="badge badge-low">ÚLTIMAS PEÇAS</span><% } %>
+  </a>
+  <div class="product-meta">
+    <div>
+      <span class="product-collection"><%= product.collection_name %></span>
+      <a href="/produto/<%= product.slug %>"><h3><%= product.name %></h3></a>
+    </div>
+    <div class="price-stack"><strong><%= formatCurrency(product.price_cents) %></strong><% if (product.compare_at_cents && product.compare_at_cents > product.price_cents) { %><del><%= formatCurrency(product.compare_at_cents) %></del><% } %></div>
+  </div>
+</article>

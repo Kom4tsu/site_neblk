@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1125" role="img" aria-label="Shadow Logo">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b0b0e"/><stop offset="1" stop-color="#252129"/></linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="20" stdDeviation="20" flood-color="#000" flood-opacity=".65"/></filter>
+  <pattern id="grain" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="#fff" opacity=".06"/></pattern>
+</defs>
+<rect width="900" height="1125" fill="url(#bg)"/>
+<rect width="900" height="1125" fill="url(#grain)"/>
+<text x="60" y="88" fill="#eae5ef" font-family="Arial Black, Impact, sans-serif" font-size="34" letter-spacing="8">NEBLK</text>
+<text x="60" y="130" fill="#8e8494" font-family="Arial, sans-serif" font-size="18" letter-spacing="5">SHADOW LOGO</text>
+<g filter="url(#shadow)">
+ <path d="M265 250 381 184h138l116 66 130 159-104 84-50-59v489H289V434l-50 59-104-84z" fill="#111216" stroke="#33313a" stroke-width="7"/>
+ <path d="M381 184c14 65 124 65 138 0" fill="#08090c" stroke="#33313a" stroke-width="7"/>
+ <path d="M289 923h322" stroke="#383640" stroke-width="8"/>
+</g>
+<g transform="translate(300 360)"><path d="M56 234 182 35l104 105-75 5 58 77 163-154-89 224-68-62-125 95z" fill="#e2e0e4"/><path d="M182 35h78l95 106h-86z" fill="#8252a9" opacity=".85"/><text x="90" y="305" fill="#e2e0e4" font-family="Arial Black, Impact" font-size="45" letter-spacing="7">NEBLK</text></g>
+<text x="60" y="1068" fill="#e2e0e4" font-family="Arial Black, Impact, sans-serif" font-size="30" letter-spacing="2">DROP 01 / 2026</text>
+<rect x="60" y="1091" width="780" height="2" fill="#8252a9" opacity=".75"/>
+</svg>

@@ -1,0 +1,70 @@
+<header class="site-header">
+  <div class="announcement" aria-label="Aviso da loja"><span>DROP DISPONÍVEL</span><i>✦</i><span>FRETE NO CHECKOUT</span><i>✦</i><span>NEBLK LETS YOU BE</span></div>
+  <div class="nav-wrap container">
+    <a href="/" class="brand" aria-label="NEBLK, página inicial">
+      <img src="/assets/brand/neblk-mark.svg" alt="" class="brand-mark">
+      <span>NEBLK</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Navegação principal">
+      <a href="/loja" class="<%= currentPath === '/loja' ? 'active' : '' %>">SHOP</a>
+      <div class="nav-dropdown">
+        <a href="/drops" class="nav-dropdown-trigger <%= currentPath.startsWith('/drops') ? 'active' : '' %>">DROPS</a>
+        <div class="nav-dropdown-menu" aria-label="Drops disponíveis">
+          <% (navDrops || []).forEach((drop) => { %>
+            <a href="/drops/<%= drop.slug %>"><span><%= drop.name.toUpperCase() %></span><b>↗</b></a>
+          <% }) %>
+          <a href="/drops" class="nav-dropdown-all">VER TODOS OS DROPS <b>↗</b></a>
+        </div>
+      </div>
+      <a href="/#sobre">SOBRE</a>
+    </nav>
+
+    <div class="nav-actions">
+      <% if (user) { %>
+        <a href="/conta" class="nav-account"><span class="desktop-only"><%= user.name.split(' ')[0].toUpperCase() %></span><span class="mobile-only">PERFIL</span></a>
+      <% } else { %>
+        <a href="/login" class="nav-account">ENTRAR</a>
+      <% } %>
+      <a href="/carrinho" class="cart-link" aria-label="Abrir carrinho">BAG <strong><%= cartCount %></strong></a>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle><span></span><span></span></button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="mobile-menu" data-mobile-menu aria-hidden="true">
+    <div class="mobile-menu-inner container">
+      <span class="eyebrow">NAVEGAÇÃO</span>
+      <a href="/loja">SHOP <span>↗</span></a>
+      <div class="mobile-menu-group">
+        <a href="/drops">DROPS <span>↗</span></a>
+        <div class="mobile-submenu">
+          <% (navDrops || []).forEach((drop) => { %>
+            <a href="/drops/<%= drop.slug %>"><%= drop.name.toUpperCase() %> <span>↗</span></a>
+          <% }) %>
+        </div>
+      </div>
+      <a href="/#sobre">SOBRE <span>↓</span></a>
+      <a href="<%= user ? '/conta' : '/login' %>"><%= user ? 'PERFIL' : 'ENTRAR' %> <span>↗</span></a>
+      <div class="mobile-menu-foot"><span>NEBLK / EST. 2026</span><span>BRASIL</span></div>
+    </div>
+  </div>
+
+  <nav class="mobile-dock" aria-label="Atalhos rápidos no celular">
+    <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>" aria-label="Início">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10.8 9-7 9 7v9.7a.5.5 0 0 1-.5.5H14v-6H10v6H3.5a.5.5 0 0 1-.5-.5z"/></svg>
+      <span>INÍCIO</span>
+    </a>
+    <a href="/loja" class="<%= currentPath === '/loja' || currentPath.startsWith('/produto/') || currentPath.startsWith('/drops') ? 'active' : '' %>" aria-label="Loja">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7.5h14l-1 13H6zM9 9V6a3 3 0 0 1 6 0v3"/></svg>
+      <span>SHOP</span>
+    </a>
+    <a href="/carrinho" class="<%= currentPath === '/carrinho' || currentPath === '/checkout' ? 'active' : '' %>" aria-label="Sacola, <%= cartCount %> itens">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16l-1 14H5zM8 9V6a4 4 0 0 1 8 0v3"/></svg>
+      <span>BAG <b><%= cartCount %></b></span>
+    </a>
+    <a href="<%= user ? '/conta' : '/login' %>" class="<%= currentPath.startsWith('/conta') || currentPath === '/login' || currentPath === '/cadastro' || currentPath === '/esqueci-senha' ? 'active' : '' %>" aria-label="<%= user ? 'Meu perfil' : 'Entrar' %>">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 20c.8-3.8 3-5.6 6.5-5.6s5.7 1.8 6.5 5.6"/></svg>
+      <span><%= user ? 'PERFIL' : 'ENTRAR' %></span>
+    </a>
+  </nav>
+</header>

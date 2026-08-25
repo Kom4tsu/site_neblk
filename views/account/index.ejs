@@ -1,0 +1,19 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<%- include('../partials/flash') %>
+<main id="main-content" class="container page-section account-page">
+  <div class="page-heading compact"><p class="eyebrow">MINHA CONTA</p><h1>OLÁ, <em><%= user.name.split(' ')[0].toUpperCase() %></em></h1><p><%= user.email %></p></div>
+  <div class="account-layout">
+    <aside class="account-aside">
+      <a class="active" href="/conta">Meus pedidos</a>
+      <a href="/conta/perfil">Meu perfil e endereço</a>
+      <a href="/loja">Continuar comprando</a>
+      <form action="/logout" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button type="submit">Sair da conta</button></form>
+    </aside>
+    <section class="account-content">
+      <div class="section-heading compact"><h2>PEDIDOS</h2><span class="muted"><%= orders.length %> no histórico</span></div>
+      <% if (orders.length) { %><div class="orders-list"><% orders.forEach((order) => { %><a href="/conta/pedidos/<%= order.order_number %>" class="order-row"><div><strong><%= order.order_number %></strong><span><%= formatDate(order.created_at) %></span></div><div><span class="status status-<%= order.status %>"><%= statusLabel(order.status) %></span><strong><%= formatCurrency(order.total_cents) %></strong></div><span>↗</span></a><% }) %></div><% } else { %><div class="empty-state small-empty"><h2>Seu histórico está limpo.</h2><p>Quando fizer um pedido, ele aparecerá aqui.</p><a href="/loja" class="button button-primary">VER DROP</a></div><% } %>
+    </section>
+  </div>
+</main>
+<%- include('../partials/footer') %>

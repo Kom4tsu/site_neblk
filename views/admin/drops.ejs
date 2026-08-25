@@ -1,0 +1,31 @@
+<%- include('../partials/head') %>
+<div class="admin-shell">
+  <%- include('../partials/admin-nav') %>
+  <main class="admin-main" id="main-content">
+    <% const adminTitle = 'Drops'; %>
+    <%- include('../partials/admin-top', { adminTitle }) %>
+    <%- include('../partials/flash') %>
+    <div class="admin-grid-2">
+      <section class="admin-panel">
+        <div class="section-heading compact"><h2><%= editingDrop ? 'Editar drop' : 'Novo drop' %></h2><span class="muted">Aparecem no menu, na página de drops e na loja.</span></div>
+        <form method="post" enctype="multipart/form-data" action="<%= editingDrop ? `/admin/drops/${editingDrop.id}` : '/admin/drops' %>" class="product-admin-form">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="form-section">
+            <div class="form-grid"><label>Nome do drop<input name="name" required value="<%= editingDrop ? editingDrop.name : '' %>" placeholder="Ex.: Drop 02"></label><label>Chamada curta / etiqueta<input name="banner_label" value="<%= editingDrop ? (editingDrop.banner_label || '') : '' %>" placeholder="Ex.: LIMITED RELEASE"></label></div>
+            <label>Descrição<textarea name="description" rows="5" placeholder="Ex.: Cápsula de inverno, estampas técnicas, limited release."><%= editingDrop ? (editingDrop.description || '') : '' %></textarea></label>
+            <div class="form-grid"><label>Banner por URL (opcional)<input name="banner_url" value="" placeholder="https://..."><small>Use ou URL ou upload. O upload substitui a URL.</small></label><label>Upload de banner<input type="file" name="banner" accept="image/jpeg,image/png,image/webp"><small>JPG, PNG ou WEBP. Até 5 MB.</small></label></div>
+            <% if (editingDrop && editingDrop.banner_url) { %><div class="drop-banner-preview"><img src="<%= editingDrop.banner_url %>" alt="Banner atual"><label class="check-label"><input type="checkbox" name="remove_banner"><span>Remover banner atual</span></label></div><% } %>
+            <label class="check-label"><input type="checkbox" name="is_active" <%= !editingDrop || editingDrop.is_active ? 'checked' : '' %>><span>Exibir este drop no site</span></label>
+          </div>
+          <div class="form-submit" style="justify-content:space-between;"><div><% if (editingDrop) { %><a href="/admin/drops" class="text-link">Cancelar edição</a><% } %></div><button type="submit" class="button button-primary"><%= editingDrop ? 'SALVAR DROP' : 'CRIAR DROP' %> ↗</button></div>
+        </form>
+      </section>
+      <section class="admin-panel table-panel">
+        <div class="section-heading compact"><h2>Ordem de exibição</h2><span class="muted"><%= drops.length %> cadastrados</span></div>
+        <p class="muted" style="margin:-5px 0 18px;">Use ↑ e ↓ para definir a ordem no menu e na página de drops.</p>
+        <div class="table-scroll"><table class="admin-table"><thead><tr><th>Drop</th><th>Peças</th><th>Status</th><th></th></tr></thead><tbody><% drops.forEach((drop, index) => { %><tr><td class="table-product"><% if (drop.banner_url) { %><img src="<%= drop.banner_url %>" alt=""><% } else { %><img src="/assets/products/shadow-logo.svg" alt=""><% } %><span><strong><%= drop.name %></strong><small class="muted"><%= drop.description || 'Sem descrição' %></small></span></td><td><%= drop.product_count || 0 %></td><td><span class="status <%= drop.is_active ? 'status-entregue' : 'status-cancelado' %>"><%= drop.is_active ? 'Ativo' : 'Arquivado' %></span></td><td><div class="drop-row-actions"><form method="post" action="/admin/drops/<%= drop.id %>/mover/up"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="icon-action" title="Mover para cima" <%= index === 0 ? 'disabled' : '' %>>↑</button></form><form method="post" action="/admin/drops/<%= drop.id %>/mover/down"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="icon-action" title="Mover para baixo" <%= index === drops.length - 1 ? 'disabled' : '' %>>↓</button></form><a href="/admin/drops/<%= drop.id %>/editar" class="table-action">EDITAR ↗</a><% if (drop.is_active) { %><form method="post" action="/admin/drops/<%= drop.id %>/arquivar"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button type="submit" class="remove-button">ARQUIVAR</button></form><% } %></div></td></tr><% }) %></tbody></table></div>
+      </section>
+    </div>
+  </main>
+  <%- include('../partials/admin-end') %>
+</div>

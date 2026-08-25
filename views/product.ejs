@@ -1,0 +1,27 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main id="main-content" class="container product-page">
+  <div class="breadcrumbs"><a href="/">Início</a><span>/</span><a href="/loja">Loja</a><span>/</span><span><%= product.name %></span></div>
+  <div class="product-layout">
+    <div class="product-gallery">
+      <% product.images.forEach((image, index) => { %><figure class="gallery-item <%= index === 0 ? 'gallery-main' : '' %>"><img src="<%= image.image_url %>" alt="<%= image.alt_text || product.name %>"></figure><% }) %>
+    </div>
+    <aside class="product-info">
+      <p class="eyebrow"><%= product.collection_name %> / <%= product.category %></p>
+      <h1><%= product.name %></h1>
+      <div class="product-price"><strong><%= formatCurrency(product.price_cents) %></strong><% if (product.compare_at_cents && product.compare_at_cents > product.price_cents) { %><del><%= formatCurrency(product.compare_at_cents) %></del><span>DROP PRICE</span><% } %></div>
+      <p class="product-description"><%= product.description %></p>
+      <form action="/carrinho/adicionar" method="post" class="add-cart-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <fieldset><legend>ESCOLHA O TAMANHO</legend><div class="size-options"><% product.variants.forEach((variant, index) => { %><label class="size-option <%= variant.stock === 0 ? 'disabled' : '' %>"><input type="radio" name="variant_id" value="<%= variant.id %>" <%= index === 0 && variant.stock > 0 ? 'checked' : '' %> <%= variant.stock === 0 ? 'disabled' : '' %> required><span><%= variant.size %></span><small><%= variant.stock > 0 ? `${variant.stock} disp.` : 'esgotado' %></small></label><% }) %></div></fieldset>
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit" class="button button-primary wide" <%= product.total_stock === 0 ? 'disabled' : '' %>><%= product.total_stock === 0 ? 'ESGOTADO' : 'ADICIONAR À BAG' %> <span>↗</span></button>
+      </form>
+      <div class="product-details"><details open><summary>DETALHES</summary><p>Modelagem oversized. Arte autoral. Ideal para sobreposição ou uso solo.</p></details><details><summary>ENVIO E TROCAS</summary><p>O frete é confirmado no atendimento após o pedido. Trocas podem ser solicitadas conforme disponibilidade e política da marca.</p></details><details><summary>GUIA DE TAMANHOS</summary><p>P: 66 cm &nbsp; M: 70 cm &nbsp; G: 74 cm &nbsp; GG: 78 cm. Medidas aproximadas de comprimento.</p></details></div>
+      <p class="product-view-note"><span>◉</span> <%= product.viewCount %> visualizações nesta peça</p>
+    </aside>
+  </div>
+  <% if (related.length) { %><section class="related-products"><div class="section-heading"><div><p class="eyebrow">CONTINUE EXPLORANDO</p><h2>NA MESMA <em>FREQUÊNCIA</em></h2></div><a class="text-link" href="/loja">VER SHOP ↗</a></div><div class="products-grid products-grid-4"><% related.forEach((product) => { %><%- include('partials/product-card', { product }) %><% }) %></div></section><% } %>
+</main>
+<%- include('partials/footer') %>

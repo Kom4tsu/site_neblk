@@ -1,0 +1,48 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main id="main-content" class="container page-section checkout-page">
+  <div class="page-heading compact"><p class="eyebrow">CHECKOUT SEGURO</p><h1>FINALIZAR <em>PEDIDO</em></h1><p class="muted">A compra é concluída após login e confirmação dos seus dados de entrega.</p></div>
+  <div class="checkout-layout">
+    <form method="post" action="/checkout" class="checkout-form" data-address-form data-checkout-form data-subtotal="<%= cart.subtotal %>">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <section>
+        <h2>DADOS PESSOAIS</h2>
+        <div class="form-grid">
+          <label>Nome completo<input name="customer_name" required value="<%= user.name || '' %>"></label>
+          <label>E-mail<input value="<%= user.email %>" disabled></label>
+          <label>WhatsApp<input name="phone" required autocomplete="tel" value="<%= user.phone || '' %>" placeholder="(00) 00000-0000"></label>
+          <label>CPF (opcional)<input name="cpf" value="<%= user.cpf || '' %>" placeholder="000.000.000-00"></label>
+        </div>
+      </section>
+      <section>
+        <h2>ENDEREÇO DE ENTREGA</h2>
+        <div class="form-grid">
+          <label>CEP <small data-cep-status></small><input name="address_zip" data-cep required autocomplete="postal-code" value="<%= user.address_zip || '' %>" placeholder="00000-000"></label>
+          <label>Rua / Avenida<input name="address_street" data-address-street required autocomplete="address-line1" value="<%= user.address_street || '' %>" placeholder="Rua, avenida ou alameda"></label>
+          <label>Número<input name="address_number" required autocomplete="address-line2" value="<%= user.address_number || '' %>" placeholder="123"></label>
+          <label>Complemento<input name="address_complement" value="<%= user.address_complement || '' %>" placeholder="Apto, bloco, referência"></label>
+          <label>Bairro<input name="address_district" data-address-district required value="<%= user.address_district || '' %>" placeholder="Centro"></label>
+          <label>Cidade<input name="address_city" data-address-city required value="<%= user.address_city || '' %>" placeholder="Cidade"></label>
+          <label>Estado<input name="address_state" data-address-state required maxlength="2" value="<%= user.address_state || '' %>" placeholder="SP"></label>
+        </div>
+        <label>Observações (opcional)<textarea name="notes" placeholder="Ex.: ponto de referência, preferência de contato."></textarea></label>
+      </section>
+      <section>
+        <h2>PAGAMENTO</h2>
+        <label class="payment-option"><input type="radio" name="payment_method" value="pix" checked><span><strong>PIX</strong><small>Validação manual após envio do comprovante.</small></span></label>
+        <label class="payment-option"><input type="radio" name="payment_method" value="manual"><span><strong>ATENDIMENTO</strong><small>A NEBLK entra em contato para combinar o pagamento.</small></span></label>
+      </section>
+      <button type="submit" class="button button-primary wide">CONFIRMAR PEDIDO ↗</button>
+    </form>
+    <aside class="order-summary checkout-summary">
+      <p class="eyebrow">SEU PEDIDO</p>
+      <% cart.items.forEach((item) => { %><div class="checkout-item"><img src="<%= item.image_url || '/assets/products/shadow-logo.svg' %>" alt=""><div><strong><%= item.name %></strong><span><%= item.size %> / Qtd. <%= item.quantity %></span></div><b><%= formatCurrency(item.price_cents * item.quantity) %></b></div><% }) %>
+      <div class="summary-row"><span>Subtotal</span><strong><%= formatCurrency(cart.subtotal) %></strong></div>
+      <div class="summary-row muted"><span data-shipping-label><%= shipping.label %></span><span data-shipping-value><%= shipping.cents ? formatCurrency(shipping.cents) : shipping.isEstimated ? 'A confirmar' : 'GRÁTIS' %></span></div>
+      <div class="summary-total"><span>TOTAL <%= shipping.isEstimated ? 'INICIAL' : '' %></span><strong data-order-total><%= formatCurrency(cart.subtotal + shipping.cents) %></strong></div>
+      <p class="checkout-freight-note" data-freight-note><%= shipping.isEstimated ? 'Digite o CEP para confirmar a modalidade de entrega.' : 'Frete definido conforme a política atual da loja.' %></p>
+    </aside>
+  </div>
+</main>
+<%- include('partials/footer') %>

@@ -1,0 +1,16 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main id="main-content" class="container page-section">
+  <div class="page-heading"><p class="eyebrow">NEBLK / SHOP</p><h1>O SEU <em>DROP</em></h1><p>Peças com presença, prontas para entrar no seu repertório.</p></div>
+  <form class="shop-filters" method="get" action="/loja">
+    <label class="search-field"><span>⌕</span><input type="search" name="q" value="<%= filters.q %>" placeholder="Buscar peça"></label>
+    <label><span>Categoria</span><select name="category"><option value="">Todas</option><% categories.forEach((item) => { %><option value="<%= item %>" <%= filters.category === item ? 'selected' : '' %>><%= item %></option><% }) %></select></label>
+    <label><span>Drop</span><select name="collection"><option value="">Todos</option><% drops.forEach((drop) => { %><option value="<%= drop.name %>" <%= filters.collection === drop.name ? 'selected' : '' %>><%= drop.name %></option><% }) %></select></label>
+    <label><span>Ordenar</span><select name="sort"><option value="recent" <%= filters.sort === 'recent' ? 'selected' : '' %>>Mais recentes</option><option value="popular" <%= filters.sort === 'popular' ? 'selected' : '' %>>Mais visualizados</option><option value="low" <%= filters.sort === 'low' ? 'selected' : '' %>>Menor preço</option><option value="high" <%= filters.sort === 'high' ? 'selected' : '' %>>Maior preço</option></select></label>
+    <button class="button button-primary small" type="submit">FILTRAR</button>
+  </form>
+  <div class="catalog-count"><span><%= products.length %> peças encontradas</span><a href="/loja" class="text-link">LIMPAR FILTROS</a></div>
+  <% if (products.length) { %><div class="products-grid catalog-grid"><% products.forEach((product) => { %><%- include('partials/product-card', { product }) %><% }) %></div><% } else { %><div class="empty-state"><h2>Nada encontrado.</h2><p>Tente ajustar os filtros ou explorar o drop completo.</p><a href="/loja" class="button button-primary">VER TODOS OS PRODUTOS</a></div><% } %>
+</main>
+<%- include('partials/footer') %>

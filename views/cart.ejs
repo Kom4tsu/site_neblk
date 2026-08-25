@@ -1,0 +1,26 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main id="main-content" class="container page-section cart-page">
+  <div class="page-heading compact"><p class="eyebrow">SUA BAG</p><h1>SELEÇÃO <em>NEBLK</em></h1></div>
+  <% if (!cart.items.length) { %>
+    <div class="empty-state"><h2>Sua bag está vazia.</h2><p>O próximo drop está esperando por você.</p><a href="/loja" class="button button-primary">EXPLORAR LOJA ↗</a></div>
+  <% } else { %>
+    <div class="cart-layout">
+      <section class="cart-items">
+        <% cart.items.forEach((item) => { %>
+          <article class="cart-item">
+            <a href="/produto/<%= item.slug %>"><img src="<%= item.image_url || '/assets/products/shadow-logo.svg' %>" alt="<%= item.name %>"></a>
+            <div class="cart-item-info"><span class="eyebrow"><%= item.color %> / <%= item.size %></span><a href="/produto/<%= item.slug %>"><h2><%= item.name %></h2></a><strong><%= formatCurrency(item.price_cents) %></strong></div>
+            <div class="cart-item-actions">
+              <form action="/carrinho/<%= item.cart_item_id %>/atualizar" method="post" class="quantity-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label>Qtd.<input name="quantity" type="number" value="<%= item.quantity %>" min="1" max="<%= Math.min(20, item.stock) %>"></label><button type="submit">ATUALIZAR</button></form>
+              <form action="/carrinho/<%= item.cart_item_id %>/remover" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="remove-button" type="submit">REMOVER</button></form>
+            </div>
+          </article>
+        <% }) %>
+      </section>
+      <aside class="order-summary"><p class="eyebrow">RESUMO</p><div class="summary-row"><span>Subtotal</span><strong><%= formatCurrency(cart.subtotal) %></strong></div><div class="summary-row muted"><span>Frete</span><span>Calculado no checkout</span></div><div class="summary-total"><span>TOTAL</span><strong><%= formatCurrency(cart.subtotal) %></strong></div><% if (user) { %><a href="/checkout" class="button button-primary wide">FINALIZAR PEDIDO ↗</a><% } else { %><a href="/login?next=%2Fcheckout" class="button button-primary wide">ENTRAR PARA FINALIZAR ↗</a><p class="muted center" style="margin-top:12px;">O checkout só é liberado após login e preenchimento dos dados de entrega.</p><% } %><a href="/loja" class="text-link center">CONTINUAR COMPRANDO</a></aside>
+    </div>
+  <% } %>
+</main>
+<%- include('partials/footer') %>

@@ -1,0 +1,37 @@
+services:
+  neblk:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: neblk-store
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PORT: 3000
+    expose:
+      - "3000"
+    ports:
+      # Só o computador servidor consegue abrir a porta localmente.
+      # A internet entra pelo Cloudflare Tunnel, não pela porta 3000.
+      - "127.0.0.1:3000:3000"
+    volumes:
+      # Banco SQLite e uploads sobrevivem a rebuild/restart do container.
+      - ./data:/app/data
+      - ./public/uploads:/app/public/uploads
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: neblk-tunnel
+    restart: unless-stopped
+    profiles: ["tunnel"]
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      neblk:
+        condition: service_healthy

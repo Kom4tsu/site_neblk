@@ -1,0 +1,5 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<%- include('../partials/flash') %>
+<main id="main-content" class="auth-page"><section class="auth-card"><p class="eyebrow">NOVO POR AQUI?</p><h1>CRIAR <em>CONTA</em></h1><p class="muted">Seu acesso à NEBLK começa aqui.</p><form method="post" action="/cadastro" class="form-stack"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label>Nome completo<input name="name" required autocomplete="name" placeholder="Seu nome"></label><label>E-mail<input name="email" type="email" required autocomplete="email" placeholder="voce@email.com"></label><label>WhatsApp<input name="phone" autocomplete="tel" placeholder="(00) 00000-0000"></label><label>Senha<input name="password" type="password" minlength="8" required autocomplete="new-password" placeholder="Mínimo de 8 caracteres"></label><button class="button button-primary wide" type="submit">CRIAR CONTA ↗</button></form><p class="auth-switch">Já tem conta? <a href="/login">ENTRAR</a></p></section></main>
+<%- include('../partials/footer') %>

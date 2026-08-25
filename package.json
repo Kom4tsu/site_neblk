@@ -1,0 +1,27 @@
+{
+  "name": "neblk-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NEBLK self-hosted streetwear e-commerce with admin panel, catalog, orders and metrics.",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --no-warnings --watch src/server.js",
+    "start": "node --no-warnings src/server.js",
+    "reset-db": "node scripts/reset-db.js",
+    "check": "node --check src/server.js && node --check src/db.js && node --check src/utils.js && node --check public/js/app.js"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.6.1",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.1",
+    "nodemailer": "^9.0.1"
+  }
+}

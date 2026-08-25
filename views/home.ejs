@@ -1,0 +1,80 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main id="main-content" class="home-page">
+  <section class="hero-v2">
+    <div class="hero-v2-grid container">
+      <div class="hero-v2-copy">
+        <p class="eyebrow hero-kicker"><span></span> DROP 01 / ONLINE NOW</p>
+        <h1>MAKE<br>YOUR <em>OWN</em><br>NOISE.</h1>
+        <p class="hero-v2-text"><%= settings.brand_slogan || 'NEBLK lets you be.' %> Streetwear autoral para quem não veste expectativa.</p>
+        <div class="hero-v2-actions">
+          <a href="/loja" class="button button-primary button-large">COMPRAR DROP <span>↗</span></a>
+          <a href="#featured" class="hero-scroll">EXPLORAR <b>↓</b></a>
+        </div>
+        <div class="hero-proof"><span>01</span><p>MODELAGEM<br>OVERSIZED</p><span>02</span><p>PEÇAS<br>LIMITADAS</p></div>
+      </div>
+
+      <div class="hero-v2-stage" aria-label="Campanha NEBLK Drop 01">
+        <div class="hero-v2-noise"></div>
+        <p class="hero-v2-edge hero-v2-edge-top">NEBLK / NEBLK / NEBLK / NEBLK</p>
+        <div class="hero-v2-orbit orbit-a"></div><div class="hero-v2-orbit orbit-b"></div>
+        <div class="hero-v2-product hero-v2-product-back"><img src="/assets/products/dragon-rose.svg" alt="Camiseta Dragon Rose NEBLK"></div>
+        <div class="hero-v2-product hero-v2-product-front"><img src="/assets/products/purple-web.svg" alt="Camiseta Purple Web NEBLK"></div>
+        <div class="hero-v2-sticker">DROP<br><b>001</b><br>LIMITED</div>
+        <div class="hero-v2-caption"><span>ESSENTIAL<br>FORM</span><span>01—26</span></div>
+        <p class="hero-v2-edge hero-v2-edge-bottom">LET THEM LOOK. LET THEM LOOK.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="signal-strip" aria-label="Destaques da marca">
+    <div class="container signal-strip-inner"><span>OVERSIZED FIT</span><i>✦</i><span>100% IDENTIDADE</span><i>✦</i><span>DROP LIMITADO</span><i>✦</i><span>NEBLK LETS YOU BE</span></div>
+  </section>
+
+  <section class="section container featured-v2" id="featured">
+    <div class="section-heading section-heading-v2"><div><p class="eyebrow">DROP 001 / SELEÇÃO</p><h2>THE <em>ESSENTIALS.</em></h2></div><p class="section-side-copy">Peças com volume, textura e presença.<br>Feitas para sair do ruído comum.</p></div>
+    <div class="products-grid products-grid-featured">
+      <% featured.forEach((product, index) => { %><%- include('partials/product-card', { product, index }) %><% }) %>
+    </div>
+    <div class="center-action"><a href="/loja" class="button button-outline">VER TODA A COLEÇÃO <span>↗</span></a></div>
+  </section>
+
+  <section id="sobre" class="manifesto-v2">
+    <div class="container manifesto-v2-grid">
+      <div class="manifesto-v2-art">
+        <div class="manifesto-index">01 / SOBRE</div>
+        <div class="manifesto-print">NO<br>RULES<br><em>JUST</em><br>FORM.</div>
+        <div class="manifesto-symbol"><img src="/assets/brand/neblk-mark.svg" alt="Símbolo NEBLK"></div>
+      </div>
+      <div class="manifesto-v2-copy">
+        <p class="eyebrow">SOBRE A NEBLK</p>
+        <h2>NOT HERE TO<br><em>BLEND IN.</em></h2>
+        <p>NEBLK nasce entre concreto, tela, som e movimento. A gente cria para quem transforma presença em assinatura.</p>
+        <p>Não existe forma certa de ocupar o espaço. Existe a sua.</p>
+        <a href="/loja" class="text-link text-link-bold">ENCONTRAR A SUA PEÇA <span>↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="collection-rail container" aria-label="Categorias da loja">
+    <a href="/loja?category=Camisetas"><span>01</span><strong>TEES</strong><em>Oversized</em><b>↗</b></a>
+    <a href="/drops"><span>02</span><strong>DROPS</strong><em>Limitados</em><b>↗</b></a>
+    <a href="/loja?sort=popular"><span>03</span><strong>FAVORITES</strong><em>Mais vistos</em><b>↗</b></a>
+  </section>
+
+  <section class="section latest-v2">
+    <div class="container"><div class="section-heading section-heading-v2"><div><p class="eyebrow">LINHA DE FRENTE</p><h2>NEW <em>FREQUENCIES.</em></h2></div><a href="/loja?sort=recent" class="text-link text-link-bold">VER NOVIDADES <span>↗</span></a></div>
+      <div class="products-grid products-grid-4"><% latest.forEach((product, index) => { %><%- include('partials/product-card', { product, index }) %><% }) %></div>
+    </div>
+  </section>
+
+  <section class="social-v2">
+    <div class="container social-v2-grid">
+      <div class="social-v2-title"><p class="eyebrow">NO SEU FEED</p><h2>SHOW<br>YOUR <em>FORM.</em></h2></div>
+      <div class="social-v2-card"><span class="social-v2-handle">@NEBLK</span><p>Marca a NEBLK no seu look. A rua também é nossa vitrine.</p><a href="<%= settings.instagram_url || '#' %>" target="_blank" rel="noreferrer" class="button button-primary">SEGUIR NO INSTAGRAM <span>↗</span></a></div>
+      <div class="social-v2-mark"><img src="/assets/brand/neblk-mark.svg" alt="NEBLK"></div>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

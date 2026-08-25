@@ -1,0 +1,15 @@
+<aside class="admin-sidebar">
+  <a href="/admin/dashboard" class="admin-brand"><img src="/assets/brand/neblk-mark.svg" alt=""><span>NEBLK<br><small>ADMIN PANEL</small></span></a>
+  <nav>
+    <a href="/admin/dashboard" class="<%= currentPath === '/admin/dashboard' ? 'active' : '' %>">◈ Dashboard</a>
+    <a href="/admin/produtos" class="<%= currentPath.startsWith('/admin/produtos') ? 'active' : '' %>">▣ Produtos</a>
+    <a href="/admin/drops" class="<%= currentPath.startsWith('/admin/drops') ? 'active' : '' %>">◉ Drops</a>
+    <a href="/admin/pedidos" class="<%= currentPath === '/admin/pedidos' ? 'active' : '' %>">▤ Pedidos</a>
+    <a href="/admin/metricas" class="<%= currentPath === '/admin/metricas' ? 'active' : '' %>">⌁ Métricas</a>
+    <a href="/admin/configuracoes" class="<%= currentPath === '/admin/configuracoes' ? 'active' : '' %>">⚙ Configurações</a>
+  </nav>
+  <div class="admin-sidebar-bottom">
+    <a href="<%= publicUrl %>" target="_blank" rel="noreferrer">↗ Ver loja</a>
+    <form action="/logout" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button type="submit">Sair</button></form>
+  </div>
+</aside>
