@@ -10,6 +10,96 @@ const morgan = require('morgan');
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GitHubStrategy = require('passport-github2').Strategy;
+
+// Configuração da sessão do Express
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'neblk-secret-key',
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Serialização do usuário para a sessão
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await db.getUserById(id); // Use o método de busca por ID do seu db.js
+    done(null, user);
+  } catch (err) {
+    done(err, null);
+  }
+});
+
+// Estratégia Google
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID || 'dummy_id',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'dummy_secret',
+    callbackURL: "/auth/google/callback"
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      // Lógica: busca se usuário já existe pelo provider_id ou cria um novo
+      let user = await db.getUserByProvider('google', profile.id);
+      if (!user) {
+        user = await db.createUser({
+          name: profile.displayName,
+          email: profile.emails?.[0]?.value || `${profile.id}@google.com`,
+          provider: 'google',
+          provider_id: profile.id
+        });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err, null);
+    }
+  }
+));
+
+// Estratégia GitHub
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID || 'dummy_id',
+    clientSecret: process.env.GITHUB_CLIENT_SECRET || 'dummy_secret',
+    callbackURL: "/auth/github/callback"
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      let user = await db.getUserByProvider('github', profile.id);
+      if (!user) {
+        user = await db.createUser({
+          name: profile.displayName || profile.username,
+          email: profile.emails?.[0]?.value || `${profile.username}@github.com`,
+          provider: 'github',
+          provider_id: profile.id
+        });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err, null);
+    }
+  }
+));
+
+// Rotas de Autenticação
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => res.redirect('/account')
+);
+
+app.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
+app.get('/auth/github/callback', 
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  (req, res) => res.redirect('/account')
+);
 
 const { db, getSettings, setSetting, nowSql, slugify, monthBounds, getDrops, getDropById, createDrop, updateDrop, archiveDrop, moveDrop } = require('./db');
 const {

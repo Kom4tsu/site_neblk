@@ -48,7 +48,9 @@ function initializeSchema() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
-      password_hash TEXT NOT NULL,
+      password_hash TEXT,
+      provider TEXT DEFAULT 'local',
+      provider_id TEXT,
       role TEXT NOT NULL DEFAULT 'customer' CHECK(role IN ('customer', 'admin')),
       phone TEXT,
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -208,7 +210,7 @@ function initializeSchema() {
     CREATE INDEX IF NOT EXISTS idx_drops_active_order ON drops(is_active, sort_order, name);
   `);
 
-  // Migração segura para instalações já existentes. Nenhuma conta, pedido, produto ou foto é apagado.
+  // Migração segura para instalações já existentes.
   addColumnIfMissing('users', 'cpf', 'TEXT');
   addColumnIfMissing('users', 'address_zip', 'TEXT');
   addColumnIfMissing('users', 'address_street', 'TEXT');
@@ -219,6 +221,10 @@ function initializeSchema() {
   addColumnIfMissing('users', 'address_state', 'TEXT');
   addColumnIfMissing('drops', 'banner_url', 'TEXT');
   addColumnIfMissing('drops', 'banner_label', 'TEXT');
+  
+  // Adiciona suporte a login social em bancos existentes
+  addColumnIfMissing('users', 'provider', "TEXT DEFAULT 'local'");
+  addColumnIfMissing('users', 'provider_id', 'TEXT');
 }
 
 function ensureSetting(key, value) {
@@ -432,6 +438,31 @@ function setSetting(key, value) {
     .run(key, String(value ?? ''), nowSql());
 }
 
+// ----------------------------------------------------
+// NOVAS FUNÇÕES: Suporte ao Login Social
+// ----------------------------------------------------
+
+function getUserById(id) {
+  return db.prepare('SELECT * FROM users WHERE id = ?').get(Number(id));
+}
+
+function getUserByProvider(provider, providerId) {
+  return db.prepare('SELECT * FROM users WHERE provider = ? AND provider_id = ?').get(provider, providerId);
+}
+
+function createUser({ name, email, passwordHash, provider = 'local', provider_id = null }) {
+  // Para evitar erros de restrição (NOT NULL) em bancos de dados antigos gerados antes da migração, 
+  // enviamos uma senha fictícia (nunca acessível) caso seja um login via rede social.
+  const safeHash = passwordHash || 'OAUTH_USER_NO_PASSWORD';
+  
+  const info = db.prepare(`
+    INSERT INTO users (name, email, password_hash, provider, provider_id, created_at)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `).run(name, email, safeHash, provider, provider_id, nowSql());
+
+  return getUserById(info.lastInsertRowid);
+}
+
 module.exports = {
   db,
   nowSql,
@@ -445,4 +476,7 @@ module.exports = {
   updateDrop,
   archiveDrop,
   moveDrop,
+  getUserById,
+  getUserByProvider,
+  createUser
 };
